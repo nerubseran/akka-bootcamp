@@ -106,7 +106,7 @@ namespace WinTail
             else if (message is InitialRead)
             {
                 InitialRead msg = message as InitialRead;
-                Self.Tell(msg);
+                reporterActor.Tell(msg.Text);
             }
         }
     }
