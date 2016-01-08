@@ -1,5 +1,6 @@
 using System;
 using Akka.Actor;
+using System.Threading;
 
 namespace WinTail
 {
@@ -10,30 +11,49 @@ namespace WinTail
     class ConsoleReaderActor : UntypedActor
     {
         public const string ExitCommand = "exit";
-        private IActorRef _consoleWriterActor;
+        public const string StartCommand = "start";
+        private readonly IActorRef _validatorActor;
 
-        public ConsoleReaderActor(IActorRef consoleWriterActor)
+        public ConsoleReaderActor(IActorRef validatorActor)
         {
-            _consoleWriterActor = consoleWriterActor;
+            _validatorActor = validatorActor;
         }
 
         protected override void OnReceive(object message)
         {
-            var read = Console.ReadLine();
-            if (!string.IsNullOrEmpty(read) && String.Equals(read, ExitCommand, StringComparison.OrdinalIgnoreCase))
+            if (message.Equals(StartCommand))
             {
-                // shut down the system (acquire handle to system via
-                // this actors context)
-                Context.System.Shutdown();
-                return;
+                DoPrintInstructions();
             }
 
-            // send input to the console writer to process and print
-            // YOU NEED TO FILL IN HERE
-
-            // continue reading messages from the console
-            // YOU NEED TO FILL IN HERE
+            GetAndValidateInput();
         }
 
+        #region Internal Methods
+
+        private void DoPrintInstructions()
+        {
+            Console.WriteLine("Please provide the URI of a log file on disk.\n");
+        }
+
+        /// <summary>
+        /// Reads input from console, validates it, then signals appropriate response
+        /// (continue processing, error, success, etc.).
+        /// </summary>
+        private void GetAndValidateInput()
+        {
+            var message = Console.ReadLine();
+            if (!string.IsNullOrEmpty(message) && String.Equals(message, ExitCommand, StringComparison.OrdinalIgnoreCase))
+            {
+                Context.System.Shutdown();
+            }
+            else
+            {
+                _validatorActor.Tell(message);
+            }
+
+        }
+
+        #endregion
     }
 }

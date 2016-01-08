@@ -24,7 +24,7 @@ namespace WinTail
 
             Props validationActorProps = Props.Create(() => new ValidationActor(consoleWriterActor));
             IActorRef validationActor = MyActorSystem.ActorOf(validationActorProps, "validationActor");
-            
+
             Props consoleReaderProps = Props.Create<ConsoleReaderActor>(validationActor);
             IActorRef consoleReaderActor = MyActorSystem.ActorOf(consoleReaderProps, "consoleReaderActor");
 
@@ -39,7 +39,7 @@ namespace WinTail
         /// Fake actor / marker class. Does nothing at all, and not even an actor actually. 
         /// Here to show why you shouldn't use typeof approach to Props.
         /// </summary>
-        public class FakeActor {}
+        public class FakeActor { }
 
     }
 }
