@@ -37,11 +37,12 @@ namespace WinTail
                 bool isValid = IsFileUri(msg);
                 if (isValid)
                 {
-                    //signal succesful imput
+                    //signal succesful input
                     consoleWriterActor.Tell(new Messages.InputSuccess(string.Format("Starting processing for {0}", msg)));
 
-                    ActorSelection tailCoordinatorActor = Context.ActorSelection("akka:/MyActorSystem/user/tailCoordinatorActor");
+                    ActorSelection tailCoordinatorActor = Context.ActorSelection("akka://MyActorSystem/user/tailCoordinatorActor");
                     tailCoordinatorActor.Tell(new TailCoordinatorActor.StartTail(msg, consoleWriterActor));
+                    Sender.Tell(new Messages.ContinueProcessing());
                 }
                 else
                 {

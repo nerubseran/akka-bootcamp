@@ -50,9 +50,6 @@ namespace WinTail
                 ActorSelection fileValidationActor = Context.ActorSelection("akka://MyActorSystem/user/fileValidationActor");
                 fileValidationActor.Tell(message);
             }
-
-            Self.Tell(new Messages.ContinueProcessing());
-
         }
 
         #endregion
