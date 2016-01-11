@@ -52,6 +52,8 @@ namespace WinTail
                 _validatorActor.Tell(message);
             }
 
+            Self.Tell(new Messages.ContinueProcessing());
+
         }
 
         #endregion
