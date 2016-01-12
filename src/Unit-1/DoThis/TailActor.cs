@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WinTail
@@ -106,6 +107,7 @@ namespace WinTail
                 string text = fileStreamReader.ReadToEnd();
                 if (!String.IsNullOrEmpty(text))
                 {
+                    reporterActor.Tell("Currently running thread: " + Thread.CurrentThread.ManagedThreadId + " --> " + text);
                     reporterActor.Tell(text);
                 }
             }
